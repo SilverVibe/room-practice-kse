@@ -62,3 +62,13 @@ def test_기존_예약을_완전히_감싸는_예약은_막는다():
 def test_같은_id의_예약은_비교에서_제외한다():
     errors = validate(make(), ROOMS, [make()])
     assert errors == []
+
+
+def test_정원을_넘는_예약은_막는다():
+    errors = validate(make(attendees=5), ROOMS, [])
+    assert "정원을 넘었습니다" in errors
+
+
+def test_정원과_같은_인원은_통과한다():
+    errors = validate(make(attendees=4), ROOMS, [])
+    assert errors == []
