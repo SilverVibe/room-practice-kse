@@ -45,4 +45,9 @@ def validate(new: Reservation, rooms: list[Room], existing: list[Reservation]) -
                 f"시간: {reservation.start}~{reservation.end})"
             )
 
+    for room in rooms:
+        if room.id == new.room_id and new.attendees > room.capacity:
+            errors.append("정원을 넘었습니다")
+            break
+
     return errors
