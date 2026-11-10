@@ -32,7 +32,17 @@ def validate(new: Reservation, rooms: list[Room], existing: list[Reservation]) -
     if start % 30 != 0 or end % 30 != 0:
         errors.append("예약은 30분 단위로만 할 수 있습니다.")
 
-    # TODO: 같은 회의실, 같은 날짜에 시간이 겹치는 예약은 막아야 한다 (현업 요청 1번)
+    for reservation in existing:
+        if (
+            reservation.id != new.id
+            and reservation.room_id == new.room_id
+            and reservation.date == new.date
+            and start < to_minutes(reservation.end)
+            and to_minutes(reservation.start) < end
+        ):
+            errors.append(
+                f"이미 예약된 시간입니다 (예약 번호: {reservation.id}, "
+                f"시간: {reservation.start}~{reservation.end})"
+            )
 
     return errors
-
